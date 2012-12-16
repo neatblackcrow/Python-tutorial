@@ -1,6 +1,7 @@
 from rat_num import RatNum
 from asserts import *
-import pytest
+#import pytest
+import unittest
 
 def assert_positive(x):
     assert x.is_positive()
@@ -17,8 +18,8 @@ def assert_not_positive_negative(x):
 def assert_eq_str(expected, s):
     assert expected == RatNum.from_str(s)
 
-class TestRatNum:
-    def setup_method(self, method):
+class TestRatNum(unittest.TestCase):
+    def setUp(self):
         self.zero           = RatNum(0)
         self.one            = RatNum(1)
         self.neg_one        = RatNum(-1)
@@ -466,4 +467,5 @@ class TestRatNum:
                 assert x == z
 
 if __name__ == "__main__":
-    pytest.main("test_rat_num.py")
+    #pytest.main("test_rat_num.py")
+    unittest.main()

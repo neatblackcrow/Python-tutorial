@@ -1,4 +1,5 @@
-import pytest
+#import pytest
+import unittest
 from asserts import *
 from rat_num import RatNum
 from rat_term import RatTerm
@@ -25,8 +26,8 @@ def term(*args):
     else:
         raise ArgumentError("term receives only one, two, or three arguments")
 
-class TestRatTerm:
-    def setup_method(self, method):
+class TestRatTerm(unittest.TestCase):
+    def setUp(self):
         self.nan_num = RatNum(1,0)
         self.nan_term = term(1,0,0)
             
@@ -206,11 +207,13 @@ class TestRatTerm:
         assert 0 == (t - t).expt
     
     def add_different_expt(self, a, b):
-        with pytest.raises(ValueError):
+        #with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             a + b
     
     def sub_different_expt(self, a, b):
-        with pytest.raises(ValueError):
+        #with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             a - b
     
     def test_add_sub_different_expts(self):
@@ -235,4 +238,5 @@ class TestRatTerm:
         assert self.nan_term == self.nan_term.anti_differentiate()
 
 if __name__ == "__main__":
-    pytest.main("test_rat_term.py")
+    #pytest.main("test_rat_term.py")
+    unittest.main()

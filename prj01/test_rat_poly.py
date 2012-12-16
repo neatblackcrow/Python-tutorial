@@ -2,7 +2,8 @@ from rat_num import RatNum
 from rat_term import RatTerm
 from rat_poly import RatPoly
 from asserts import *
-import pytest
+#import pytest
+import unittest
 
 def num(a, b=1):
     return RatNum(a,b)
@@ -54,7 +55,7 @@ def assert_from_str(s, expected_coeffs):
 def assert_str_from_str_works(s):
     assert s == str(parse(s))
 
-class TestRatPoly:
+class TestRatPoly(unittest.TestCase):
     def test_one_arg_constructor(self):
         assert_poly_coeff(RatPoly(), [])
 
@@ -414,4 +415,5 @@ class TestRatPoly:
         assert_approx(369.3333333333, quad_poly(7,6,2).integrate(1,5))
 
 if __name__ == "__main__":
-    pytest.main("test_rat_poly.py")
+    #pytest.main("test_rat_poly.py")
+    unittest.main()
