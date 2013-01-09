@@ -20,7 +20,8 @@ class RatNum:
         @param denom: the denominator. Defaulted to 1.
         @type denom: integer
         """
-        pass
+        self.nominator = nom
+        self.denominator = denom
     
     @classmethod
     def from_str(klass, s):
