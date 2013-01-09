@@ -20,8 +20,24 @@ class RatNum:
         @param denom: the denominator. Defaulted to 1.
         @type denom: integer
         """
-        self.nominator = nom
-        self.denominator = denom
+        # Add attributes to the object
+        self.nominator = int(nom)
+        self.denominator = int(denom)
+        
+        # convert to the lowest fraction
+        if self.is_nan() == False :
+            a, b = self.nominator, self.denominator
+            while b:
+                a, b = b, a%b
+            self.nominator /= a
+            self.denominator /= a
+        
+        # if fraction was negative then move the sign to the nominator
+        if self.is_negative() == True :
+            a, b = str(self.nominator).replace("-",""), str(self.denominator).replace("-","")
+            a = "-" + a
+            self.nominator = int(a)
+            self.denominator = int(b)
     
     @classmethod
     def from_str(klass, s):
@@ -31,37 +47,50 @@ class RatNum:
         @type s: string
         @rtype: RatNum
         """
-        pass
-    
+        if s == "nan" :
+            return RatNum(1,0)
+        elif "/" in s :
+            a, b = s.split("/")
+            return RatNum(int(a),int(b))
+        else :
+            return RatNum(int(s))
+
     def is_nan(self):
         """Returns True when self is not a number (nan).
         That is, when the denominator is zero.
         
         @rtype: boolean
         """
-        pass
+        try :
+            a = self.nominator / self.denominator
+        except ZeroDivisionError :
+            return True
+        return False
     
     def is_positive(self):
         """Check if C{self} is positive.
         
         @rtype: boolean
         """
-        pass
+        return self.is_nan() == False and self.__float__() > 0
     
     def is_negative(self):
         """Check if C{self} is negative.
         
         @rtype: boolean
         """
-        pass
+        return self.is_nan() == False and self.__float__() < 0
     
     def __float__(self):
-        """Convert C{self} to a floating point number.
-        Must output C{float('nan')} when C{self} is nan.
+        """Convert C{self} to a self.__float__ing point number.
+        Must output C{self.__float__('nan')} when C{self} is nan.
         
-        @rtype: float
+        @rtype: self.__float__
         """
-        pass
+        if self.is_nan() == True :
+            return "nan"
+        else :
+            return float(self.nominator)/self.denominator
     
     def __int__(self):
         """Convert C{self} to an integer.
@@ -71,7 +100,10 @@ class RatNum:
         
         @rtype: integer
         """
-        pass
+        if self.__float__() > 0 :
+            return int(math.ceil(self.__float__()))
+        else :
+            return int(math.floor(self.__float__()))
     
     def __eq__(self, other):
         """Equality operator.
@@ -80,7 +112,9 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: boolean
         """
-        pass
+        if other.__class__ == str :
+            return str(self) == other
+        return self.__float__() == other.__float__()
     
     def __ne__(self, other):
         """Inequality operator.
@@ -89,7 +123,8 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: boolean
         """
-        pass
+        return self.__float__() != other.__float__()
+        
         
     def __add__(self, other):
         """Addition operator.
@@ -98,8 +133,19 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: C{RatNum}
         """
-        pass
-    
+        if self.is_nan() == False and other.is_nan() == False :
+            if self.denominator == other.denominator :
+                return RatNum(self.nominator + other.nominator,self.denominator)
+            else :
+                lcf = self.denominator * other.denominator
+                a = lcf / self.denominator
+                b = lcf / other.denominator
+                self.nominator *= a
+                other.nominator *= b
+                return RatNum(self.nominator + other.nominator,lcf)
+        else :
+            return RatNum(1, 0)
+        
     def __sub__(self, other):
         """Subtraction operator.
         
@@ -107,7 +153,19 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: C{RatNum}
         """
-        pass
+        if self.is_nan() == False and other.is_nan() == False :
+            if self.denominator == other.denominator :
+                return RatNum(self.nominator - other.nominator,self.denominator)
+            else :
+                lcf = self.denominator * other.denominator
+                a = lcf / self.denominator
+                b = lcf / other.denominator
+                self.nominator *= a
+                other.nominator *= b
+                return RatNum(self.nominator - other.nominator,lcf)
+        else :
+            return RatNum(1, 0)
+        
     
     def __mul__(self, other):
         """Multiplication operator.
@@ -116,8 +174,11 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: C{RatNum}
         """
-        pass
-
+        if self.is_nan() == False and other.is_nan() == False :
+            return RatNum(self.nominator * other.nominator,self.denominator * other.denominator)
+        else :
+            return RatNum(1, 0)
+        
     def __div__(self, other):
         """Division operator.
         
@@ -125,7 +186,11 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: C{RatNum}
         """
-        pass
+        if self.is_nan() == False and other.is_nan() == False :
+            return RatNum(self.nominator * other.denominator,self.denominator * other.nominator)
+        else :
+            return RatNum(1, 0)
+        
     
     def __str__(self):
         """Return the string representation of C{self}
@@ -139,14 +204,28 @@ class RatNum:
         
         @rtype: string
         """
-        pass
+        if self.is_nan() == True :
+            return "nan"
+        elif self.denominator == 1 :
+            return str(self.nominator)
+        else :
+            a = self.nominator
+            b = self.denominator
+            while b:
+                a, b = b, a%b
+            self.nominator /= a
+            self.denominator /= a
+            return "{}/{}".format(self.nominator,self.denominator)
     
     def __neg__(self):
         """Negation operator.
         
         @rtype: C{RatNum}
         """
-        pass
+        if self.is_nan() == True :
+            return "nan"
+        else :
+            return RatNum(self.nominator * -1,self.denominator)
     
     def __cmp__(self, other):
         """Comparision operator.
@@ -159,4 +238,10 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: integer
         """
-        pass
+        m,n = self.__float__(),other.__float__()
+        if m > n :
+            return 1
+        elif m < n :
+            return -1
+        else :
+            return 0
