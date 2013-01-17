@@ -114,6 +114,8 @@ class RatNum:
         """
         if other.__class__ == str :
             return str(self) == other
+        elif self.__class__ == int and other.__class__ == int :
+            return self == other
         return self.__float__() == other.__float__()
     
     def __ne__(self, other):
@@ -134,15 +136,8 @@ class RatNum:
         @rtype: C{RatNum}
         """
         if self.is_nan() == False and other.is_nan() == False :
-            if self.denominator == other.denominator :
-                return RatNum(self.nominator + other.nominator,self.denominator)
-            else :
-                lcf = self.denominator * other.denominator
-                a = lcf / self.denominator
-                b = lcf / other.denominator
-                self.nominator *= a
-                other.nominator *= b
-                return RatNum(self.nominator + other.nominator,lcf)
+            nom, denom = self.nominator * other.denominator + other.nominator * self.denominator, self.denominator * other.denominator
+            return RatNum(nom, denom)
         else :
             return RatNum(1, 0)
         
@@ -154,15 +149,8 @@ class RatNum:
         @rtype: C{RatNum}
         """
         if self.is_nan() == False and other.is_nan() == False :
-            if self.denominator == other.denominator :
-                return RatNum(self.nominator - other.nominator,self.denominator)
-            else :
-                lcf = self.denominator * other.denominator
-                a = lcf / self.denominator
-                b = lcf / other.denominator
-                self.nominator *= a
-                other.nominator *= b
-                return RatNum(self.nominator - other.nominator,lcf)
+            nom, denom = self.nominator * other.denominator - other.nominator * self.denominator, self.denominator * other.denominator
+            return RatNum(nom, denom)            
         else :
             return RatNum(1, 0)
         
@@ -174,7 +162,9 @@ class RatNum:
         @type other: C{RatNum} 
         @rtype: C{RatNum}
         """
-        if self.is_nan() == False and other.is_nan() == False :
+        if self.__class__ == RatNum and other.__class__ == int :
+            return float(self) * other        
+        elif self.is_nan() == False and other.is_nan() == False :
             return RatNum(self.nominator * other.nominator,self.denominator * other.denominator)
         else :
             return RatNum(1, 0)
