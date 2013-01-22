@@ -251,7 +251,8 @@ class RatPoly:
         for item in self.terms :
             temp_list += [item.eval(x)]
         
-        return sum(temp_list)
+        temp = sum(temp_list)
+        return temp
     
     def differentiate(self):
         """Return the derivative of C{self}.
