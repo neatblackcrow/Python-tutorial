@@ -18,7 +18,7 @@ class RatPoly:
         
             - If the user doesn't specify any arguments, initialize
               C{self} as the zero polynomial.
-            - If the user specifies only C{coeff}, initialize 
+            - If the user specifies only C{coeff}, initialize
               C{self} as a degree-0 polynomial whose value is C{coeff}
             - If the user specifies both C{coeff} and C{expt},
               then initialize C{self} as the polynomial C{coeff}*x^C{expt}.
@@ -28,8 +28,15 @@ class RatPoly:
         @param expt: the exponent
         @type expt: integer
         """
-        pass
-    
+        self.terms = []
+        
+        for i in range(expt):
+            self.terms += [RatTerm(coeff, i)]
+        self.terms += [RatTerm(coeff, 0)]
+        
+        while self.terms[-1].is_zero() and len(self.terms) > 1 :
+            self.terms.pop()
+        
     def coeff(self, expt):
         """Return the coefficient of the term 
         with the given exponent.
@@ -49,14 +56,14 @@ class RatPoly:
         
         @rtype: integer
         """
-        pass
+        return self.terms[0].expt
     
     def is_zero(self):
         """Check if the polynomial is the zero polynomial.
         
         @rtype: boolean
         """
-        pass
+        return self.terms[0].is_zero()
     
     def is_nan(self):
         """Check if the polynomial is not a number.
@@ -64,7 +71,10 @@ class RatPoly:
         
         @rtype: boolean
         """
-        pass
+        for item in self.terms :
+            if item.coeff.is_nan() :
+                return True
+        return False
     
     def __eq__(self, other):
         """Equality operator.
@@ -86,7 +96,7 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        pass
+        return RatPoly(RatNum(0, 1), 1)
     
     @classmethod
     def nan(klass):
@@ -94,7 +104,7 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        pass
+        return RatPoly(RatNum(1, 0), 1)
     
     @classmethod
     def from_str(klass, s):
@@ -104,8 +114,32 @@ class RatPoly:
         @param s:
         @type s: string
         """
-        pass
-    
+        temp_list = []
+        
+        # Prevent the first negative sign from being seperated.
+        temp_list += s[0]
+        
+        i = 0
+        for sub_str in s[1:] :
+            if sub_str == "-" :
+                temp_list += "-"
+                i += 1
+            elif sub_str == "+" :
+                temp_list.append("")
+                i += 1
+            else :
+                temp_list[i] += sub_str
+                
+        li = []
+        for sub_item in temp_list :
+            li.append([RatTerm.from_str(sub_item).coeff, RatTerm.from_str(sub_item).expt])
+
+        poly = RatPoly()
+        poly.terms = []
+        for coeff, expt in li :
+            poly.terms += [RatTerm(coeff, expt)]
+        return poly
+        
     def __str__(self):
         """Return a string representation of the polynomial.
         
@@ -114,7 +148,20 @@ class RatPoly:
         
         @rtype: string
         """
-        pass
+        temp_str = ""
+        
+        for k in self.terms:
+            print(str(k))
+            if str(k) == "x" :
+                temp_str += "+1"
+            elif str(k) == "-x" :
+                temp_str += "-1"
+            elif not str(k).startswith("-") and k != self.terms[0] :
+                temp_str += "+" + str(k)
+            else :
+                temp_str += str(k)
+            
+        return temp_str
     
     def __add__(self, other):
         """Addition operator.

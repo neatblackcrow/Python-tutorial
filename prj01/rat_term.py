@@ -262,10 +262,6 @@ class RatTerm:
         if self.is_nan() or other.is_nan() :
             return RatTerm(RatNum(1, 0), 0)
         
-        # Operation on zero
-        if self.is_zero() or other.is_zero() :
-            return RatTerm(RatNum(0, 1), 0)
-        
         # Normal operation
         return RatTerm(self.coeff * other.coeff, self.expt + other.expt)
     
@@ -281,9 +277,7 @@ class RatTerm:
             return RatTerm(RatNum(1, 0), 0)
         
         # Operation on zero
-        if self.is_zero() :
-            return RatTerm(RatNum(0, 1), 0)
-        elif other.is_zero() :
+        if other.is_zero() :
             return RatTerm(RatNum(1, 0), 0)
         
         # Normal operation
