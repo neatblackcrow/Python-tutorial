@@ -96,19 +96,19 @@ class RatTerm:
         """
         # Special cases
         if s == "nan" :
-            return RatTerm(RatNum(1, 0), 0)
+            return RatTerm(RatNum(1, 0), 1)
         elif s == "0" :
-            return RatTerm(RatNum(0, 1), 0)
+            return RatTerm(RatNum(0, 1), 1)
         elif s == "x" :
-            return RatTerm(RatNum(1, 1), 0)
+            return RatTerm(RatNum(1, 1), 1)
         elif s == "-x" :
-            return RatTerm(RatNum(-1, 1), 0)
+            return RatTerm(RatNum(-1, 1), 1)
         
         # Exponent
         if "^" in s :
             expo = int(s.split("^")[1])
         else :
-            expo = 1
+            expo = 0
            
         # Rational coefficient 
         co = s.split("*")[0]
@@ -128,7 +128,6 @@ class RatTerm:
             nom = int(s.split("*")[0])
             denom = 1
             
-        
         return RatTerm(RatNum(nom, denom), expo)
     
     @classmethod

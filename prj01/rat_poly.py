@@ -29,13 +29,10 @@ class RatPoly:
         @type expt: integer
         """
         self.terms = []
+        for i in range(expt) :
+            self.terms += [RatTerm(RatNum(0, 1), i)]
+        self.terms += [RatTerm(coeff, expt)]
         
-        for i in range(expt):
-            self.terms += [RatTerm(coeff, i)]
-        self.terms += [RatTerm(coeff, 0)]
-        
-        while self.terms[-1].is_zero() and len(self.terms) > 1 :
-            self.terms.pop()
         
     def coeff(self, expt):
         """Return the coefficient of the term 
@@ -45,7 +42,9 @@ class RatPoly:
         @type expt: integer
         @rtype: C{RatNum}
         """
-        pass
+        for item in self.terms :
+            if item.expt == expt :
+                return item.coeff
     
     def degree(self):
         """Return the degree of the polynomial.
@@ -81,14 +80,17 @@ class RatPoly:
         
         @rtype: boolean
         """
-        pass
+        if self.__class__ == int and other.__class__ == int :
+            return self == other
+        else :
+            return self.terms == other.terms
         
     def __ne__(self, other):
         """Inequality operator.
         
         @rtype: boolean
         """
-        pass
+        return self.terms != other.terms
     
     @classmethod
     def zero(klass):
@@ -114,6 +116,8 @@ class RatPoly:
         @param s:
         @type s: string
         """
+        if s == "nan" :
+            return RatPoly(RatNum(1, 0), 0)
         temp_list = []
         
         # Prevent the first negative sign from being seperated.
@@ -136,8 +140,17 @@ class RatPoly:
 
         poly = RatPoly()
         poly.terms = []
-        for coeff, expt in li :
-            poly.terms += [RatTerm(coeff, expt)]
+        degree = max(i[1] for i in li)
+        i = degree
+        while i >= 0 :
+            for coeff, expt in li :
+                if i == expt :
+                    poly.terms += [RatTerm(coeff, expt)]
+                    break
+            else :
+                poly.terms += [RatTerm(RatNum(0, 1), i)]
+            i -= 1
+            
         return poly
         
     def __str__(self):
@@ -151,7 +164,6 @@ class RatPoly:
         temp_str = ""
         
         for k in self.terms:
-            print(str(k))
             if str(k) == "x" :
                 temp_str += "+1"
             elif str(k) == "-x" :
@@ -170,7 +182,10 @@ class RatPoly:
         @type other: C{RatPoly}
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def __sub__(self, other):
         """Subtraction operator.
@@ -179,7 +194,10 @@ class RatPoly:
         @type other: C{RatPoly}
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def __mul__(self, other):
         """Multiplication operator.
@@ -188,7 +206,10 @@ class RatPoly:
         @type other: C{RatPoly}
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def __div__(self, other):
         """Division operator.
@@ -197,7 +218,10 @@ class RatPoly:
         @type other: C{RatPoly}
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def __neg__(self):
         """Negation operator.
@@ -223,7 +247,10 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def anti_differentiate(self):
         """Return an anti-derivative of C{self} with constant 0.
@@ -234,7 +261,10 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
     def integrate(self, a, b):
         """Compute the definite integral of the
@@ -249,5 +279,8 @@ class RatPoly:
         @param b:
         @type b: number
         """
-        pass
+        if not self.is_nan() and not other.is_nan() :
+            pass
+        else :
+            return RatPoly(RatNum(1, 0), 0)
     
