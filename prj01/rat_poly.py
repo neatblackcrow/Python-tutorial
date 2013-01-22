@@ -106,7 +106,7 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        return RatPoly(RatNum(1, 0), 1)
+        return RatPoly(RatNum(1, 0), 0)
     
     @classmethod
     def from_str(klass, s):
@@ -228,7 +228,17 @@ class RatPoly:
         
         @rtype: C{RatPoly}
         """
-        pass
+        temp_list = []
+        for item in self.terms :
+            temp_list += [-item]
+        
+        poly = RatPoly()
+        poly.terms = []
+        
+        for term in temp_list :
+            poly.terms += [term]
+            
+        return poly
     
     def eval(self, x):
         """Evaluate the polynomial at x.
@@ -237,7 +247,11 @@ class RatPoly:
         @type x: number
         @rtype: number
         """
-        pass
+        temp_list = []
+        for item in self.terms :
+            temp_list += [item.eval(x)]
+        
+        return sum(temp_list)
     
     def differentiate(self):
         """Return the derivative of C{self}.
