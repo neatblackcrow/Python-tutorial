@@ -1,3 +1,6 @@
+#ID:5510405791
+#Name:Voravut Nateluercha
+
 from webshop_model import Customer, Product, Order, Customers, Products, Orders
 
 class Webshop:
@@ -64,7 +67,7 @@ class Webshop:
         """
         if sku not in self.products:
             self.products.add(sku, Product(sku, name, description, price_ex_vat))
-            return  Product(sku,name, description, price_ex_vat)
+            return  Product(sku,name ,description ,price_ex_vat)
         else:
             return None
 
