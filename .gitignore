@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #################
 ## Eclipse
 #################
@@ -213,3 +214,9 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+=======
+*.pyc
+*.pyo
+.DS_Store
+
+>>>>>>> a85d7e435c17164243a41e48792dc179287bfac0
